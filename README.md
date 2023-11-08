@@ -36,11 +36,13 @@ The data collected for the user represented by the `User` interface.
 
 ## Usage
 
-**Use branch `no-guard`** as master contains a NestJS guard for rejecting non-admin calls on endpoints via decorator and this causes an [issue](https://github.com/evilsprut/nestjs-telegraf/issues/1165) in Telegraf.
-
 Install via npm or execute `main` executable file.
 
 ### Environment
 
 - TELEGRAM_BOT_TOKEN ➡️ Valid telegram bot API token
 - ADMINS ➡️ The list of the usernames of the admins
+
+## Issues
+
+[(TelegrafJS) NestJS guard crashing server when canActivate is false](https://github.com/evilsprut/nestjs-telegraf/issues/1165)
