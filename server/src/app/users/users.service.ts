@@ -16,7 +16,10 @@ export class UsersService {
   };
 
   addUser = (user: User) => {
-    if (this.users.filter((item) => item.id === user.id).length === 0)
+    if (
+      !user.is_bot &&
+      this.users.filter((item) => item.id === user.id).length === 0
+    )
       this.users.push(user);
   };
 
