@@ -1,9 +1,10 @@
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Command, Help, Start, Update } from 'nestjs-telegraf';
 import { Context } from 'telegraf';
 import { UsersService } from './users/users.service';
-import { IsAdminGuard } from './users/is-admin.guard';
 import { User } from './users/entities/user.entity';
+
+type UserFilter = (user: User) => string | undefined;
 
 @Update()
 @Injectable()
@@ -36,9 +37,19 @@ export class AppService {
     );
   }
 
-  @UseGuards(IsAdminGuard)
   @Command('list')
   async onList(ctx: Context) {
+    const filter: UserFilter = (user: User) => JSON.stringify(user, null, 2);
+    this.listUserNames(ctx, filter);
+  }
+
+  @Command('listUsernames')
+  async onListUsernames(ctx: Context) {
+    const filter: UserFilter = (user: User) => user.username;
+    this.listUserNames(ctx, filter);
+  }
+
+  private listUserNames(ctx: Context, filter: UserFilter) {
     if (
       ctx.from &&
       ctx.from.username &&
@@ -49,10 +60,10 @@ export class AppService {
         ctx.reply(
           this.usersService
             .getUsers()
-            .map((item) => JSON.stringify(item, null, 2))
+            .map((user) => filter(user))
             .join('\n')
         );
       else ctx.reply('No racers yet');
-    }
+    } else ctx.reply('Only admins can use this command');
   }
 }
