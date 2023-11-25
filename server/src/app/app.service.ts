@@ -27,7 +27,8 @@ export class AppService {
 
   @Command('join')
   async onJoinRace(ctx: Context) {
-    if (ctx.from) this.usersService.addUser(ctx.from);
+    const chat = await ctx.getChat();
+    if (ctx.from) this.usersService.addUser({ ...ctx.from, group: chat.id });
     console.log('Racers');
     this.usersService.getUsers().map((user) => {
       console.log(`from: ${JSON.stringify(user, null, 2)}`);
@@ -40,26 +41,28 @@ export class AppService {
   @Command('list')
   async onList(ctx: Context) {
     const filter: UserFilter = (user: User) => JSON.stringify(user, null, 2);
-    this.listUserNames(ctx, filter);
+    await this.listUsernames(ctx, filter);
   }
 
   @Command('listUsernames')
   async onListUsernames(ctx: Context) {
     const filter: UserFilter = (user: User) => user.username;
-    this.listUserNames(ctx, filter);
+    await this.listUsernames(ctx, filter);
   }
 
-  private listUserNames(ctx: Context, filter: UserFilter) {
+  private async listUsernames(ctx: Context, filter: UserFilter) {
     if (
       ctx.from &&
       ctx.from.username &&
-      this.usersService.isAdmin(ctx.from.username)
+      (await this.usersService.isAdmin(ctx))
     ) {
+      const chat = await ctx.getChat();
       const users: User[] = this.usersService.getUsers();
       if (users.length > 0)
         ctx.reply(
           this.usersService
             .getUsers()
+            .filter((user: User) => user.group === chat.id)
             .map((user) => filter(user))
             .join('\n')
         );

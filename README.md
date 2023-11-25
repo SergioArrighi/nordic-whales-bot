@@ -32,6 +32,7 @@ The data collected for the user represented by the `User` interface.
     	last_name?:  string  |  undefined;
     	username?:  string  |  undefined;
     	language_code?:  string  |  undefined;
+    		group: number;
     }
 
 ## Usage
@@ -41,7 +42,18 @@ Install via npm or execute `main` executable file.
 ### Environment
 
 - TELEGRAM_BOT_TOKEN ➡️ Valid telegram bot API token
-- ADMINS ➡️ The list of the usernames of the admins
+
+### Build the executable
+
+You need to install nexe globally and then execute
+
+**MacOS**
+
+    nexe ./dist/server/main.js --build windows-x86-14.15.3 --python /usr/local/bin/python3 --verbose -r .env -o ./exe/nordic-whales-bot
+
+**Windows (not tested)**
+
+Replace file name with nordic-whales-bot.exe?
 
 ## Issues
 

@@ -5,4 +5,5 @@ export interface User {
   last_name?: string | undefined;
   username?: string | undefined;
   language_code?: string | undefined;
+  group: number;
 }
