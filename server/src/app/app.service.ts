@@ -57,16 +57,15 @@ export class AppService {
       (await this.usersService.isAdmin(ctx))
     ) {
       const chat = await ctx.getChat();
-      const users: User[] = this.usersService.getUsers();
+      const users: User[] = this.usersService
+        .getUsers()
+        .filter((user: User) => user.group === chat.id);
       if (users.length > 0)
-        ctx.reply(
-          this.usersService
-            .getUsers()
-            .filter((user: User) => user.group === chat.id)
-            .map((user) => filter(user))
-            .join('\n')
+        ctx.telegram.sendMessage(
+          ctx.from.id,
+          users.map((user) => filter(user)).join('\n')
         );
-      else ctx.reply('No racers yet');
+      else ctx.telegram.sendMessage(ctx.from.id, 'Test');
     } else ctx.reply('Only admins can use this command');
   }
 }
