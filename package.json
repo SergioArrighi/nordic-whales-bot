@@ -5,7 +5,7 @@
   "scripts": {
     "nx": "nx",
     "rucken": "rucken",
-    "start": "node dist/apps/server/main.js",
+    "start": "node dist/server/main.js",
     "build": "npm run nx -- build server",
     "test": "nx test",
     "serve": "npm run nx -- serve server",
